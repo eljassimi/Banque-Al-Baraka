@@ -1,3 +1,3 @@
 package main.com.albaraka.entity;
 
-public record Client(String id, String name, String email) {}
+public record Client(Long id, String name, String email) {}
