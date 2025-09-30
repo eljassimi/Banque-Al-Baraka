@@ -101,5 +101,18 @@ public class TransactionDAO {
         );
     }
 
+    public Transaction findById(Long id) throws SQLException {
+        String sql = "SELECT * FROM transaction WHERE id = ?";
+        try (Connection conn = DatabaseConfig.getConnection();PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return createTransactionFromResultSet(rs);
+                }
+            }
+        }
+        return null;
+    }
+
 
 }
