@@ -53,5 +53,8 @@ public class ClientService {
                 .mapToDouble(Compte::getSolde)
                 .sum();
     }
+    public int calculerNombreCompte(Long idClient) throws SQLException {
+        return compteDAO.findByClient(idClient).size();
+    }
 
 }
