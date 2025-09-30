@@ -29,10 +29,10 @@ public class ClientDAO {
         }
     }
 
-    public void delete(Client client) throws SQLException {
+    public void delete(Long id) throws SQLException {
         String sql = "DELETE FROM client WHERE id = ?";
         try (Connection c = DatabaseConfig.getConnection(); PreparedStatement stmt = c.prepareStatement(sql)) {
-            stmt.setLong(1, client.id());
+            stmt.setLong(1, id);
         }
     }
     public List<Client> findAll() throws SQLException {
