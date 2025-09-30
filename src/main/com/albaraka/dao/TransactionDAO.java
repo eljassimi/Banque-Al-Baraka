@@ -27,4 +27,25 @@ public class TransactionDAO {
          }
     }
 
+    public void update(Transaction transaction) throws SQLException {
+        String sql = "UPDATE transaction SET date = ?, montant = ?, type = ?, lieu = ?, idcompte = ? WHERE id = ?";
+
+        try (Connection c = DatabaseConfig.getConnection();
+             PreparedStatement stmt = c.prepareStatement(sql)) {
+
+            stmt.setTimestamp(1, Timestamp.valueOf(transaction.date()));
+            stmt.setDouble(2, transaction.montant());
+            stmt.setString(3, transaction.type().name());
+            stmt.setString(4, transaction.lieu());
+            stmt.setLong(5, transaction.idCompte());
+            stmt.setLong(6, transaction.id());
+
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Echec update la transaction avec id=" + transaction.id());
+            }
+        }
+    }
+
+
 }
