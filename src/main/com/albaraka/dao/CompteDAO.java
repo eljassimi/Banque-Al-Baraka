@@ -135,6 +135,24 @@ public class CompteDAO {
         }
     }
 
+    public List<Compte> findByClient(Long idClient) throws SQLException {
+        String sql = "SELECT * FROM compte WHERE idClient = ?";
+        List<Compte> comptes = new ArrayList<>();
+
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, idClient);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    comptes.add(createCompteFromResultSet(rs));
+                }
+            }
+        }
+        return comptes;
+    }
+
     private Compte createCompteFromResultSet(ResultSet rs) throws SQLException {
         long id = rs.getLong("id");
         String numero = rs.getString("numero");

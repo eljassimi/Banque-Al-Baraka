@@ -53,4 +53,8 @@ public class CompteService {
         return compteDAO.updateParametres(idCompte, decouvertAutorise, tauxInteret);
     }
 
+    public List<Compte> rechercherParClient(Long idClient) throws SQLException {
+        return compteDAO.findByClient(idClient);
+    }
+
 }
