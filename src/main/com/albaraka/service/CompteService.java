@@ -7,6 +7,7 @@ import main.com.albaraka.entity.CompteCourant;
 import main.com.albaraka.entity.CompteEpargne;
 
 import java.sql.SQLException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,5 +57,18 @@ public class CompteService {
     public List<Compte> rechercherParClient(Long idClient) throws SQLException {
         return compteDAO.findByClient(idClient);
     }
+
+    public Optional<Compte> trouverCompteMaxSolde() throws SQLException {
+        List<Compte> comptes = compteDAO.findAll();
+        return comptes.stream()
+                .max(Comparator.comparingDouble(Compte::getSolde));
+    }
+
+    public Optional<Compte> trouverCompteMinSolde() throws SQLException {
+        List<Compte> comptes = compteDAO.findAll();
+        return comptes.stream()
+                .min(Comparator.comparingDouble(Compte::getSolde));
+    }
+
 
 }
