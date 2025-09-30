@@ -2,6 +2,7 @@ package main.com.albaraka.service;
 
 import main.com.albaraka.dao.CompteDAO;
 import main.com.albaraka.dao.TransactionDAO;
+import main.com.albaraka.entity.Compte;
 import main.com.albaraka.entity.CompteCourant;
 import main.com.albaraka.entity.CompteEpargne;
 
@@ -25,6 +26,14 @@ public class CompteService {
     public void creerCompteEpargne(String numero, double soldeInitial, Long idClient, double tauxInteret) throws SQLException {
         CompteEpargne compte = new CompteEpargne(numero, soldeInitial, idClient, tauxInteret);
         compteDAO.insert(compte);
+    }
+
+    public void updateCompte(Compte compte) throws SQLException {
+        compteDAO.update(compte);
+    }
+
+    public void deleteCompte(Long id) throws SQLException {
+        compteDAO.delete(id);
     }
 
 }
