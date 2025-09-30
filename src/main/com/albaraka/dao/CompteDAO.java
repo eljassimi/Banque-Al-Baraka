@@ -119,10 +119,10 @@ public class CompteDAO {
 
         if ("COURANT".equalsIgnoreCase(type)) {
             double decouvert = rs.getDouble("decouvertAutorise");
-            return new CompteCourant(id, numero, solde, idClient, decouvert);
+            return new CompteCourant(numero, solde, idClient, decouvert);
         } else if ("EPARGNE".equalsIgnoreCase(type)) {
             double tauxInteret = rs.getDouble("tauxInteret");
-            return new CompteEpargne(id, numero, solde, idClient, tauxInteret);
+            return new CompteEpargne(numero, solde, idClient, tauxInteret);
         } else {
             throw new SQLException("Type de compte inconnu: " + type);
         }

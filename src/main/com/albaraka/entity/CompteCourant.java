@@ -3,8 +3,8 @@ package main.com.albaraka.entity;
 public final class CompteCourant extends Compte {
     private final double decouvertAutorise;
 
-    public CompteCourant(Long id, String numero, double solde, Long idClient, double decouvertAutorise) {
-        super(id, numero, solde, idClient);
+    public CompteCourant(String numero, double solde, Long idClient, double decouvertAutorise) {
+        super(numero, solde, idClient);
         this.decouvertAutorise = decouvertAutorise;
     }
 

@@ -1,5 +1,7 @@
 package main.com.albaraka.entity;
 
+import main.com.albaraka.util.GenerateId;
+
 import java.time.LocalDateTime;
 
 public record Transaction(
@@ -11,7 +13,8 @@ public record Transaction(
         Long idCompte
 ) {
 
-    public Transaction {
+    public Transaction (LocalDateTime date, double montant, TypeTransaction type, String lieu, Long idCompte){
+        this(GenerateId.generateId(), date != null ? date : LocalDateTime.now(), montant, type, lieu, idCompte);
         if (date == null) {
             throw new IllegalArgumentException("La date ne peut pas etre null");
         }

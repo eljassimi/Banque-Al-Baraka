@@ -1,5 +1,7 @@
 package main.com.albaraka.entity;
 
+import main.com.albaraka.util.GenerateId;
+
 public sealed class Compte permits CompteCourant, CompteEpargne {
 
     protected final Long id;
@@ -7,8 +9,8 @@ public sealed class Compte permits CompteCourant, CompteEpargne {
     protected final double solde;
     protected final Long idClient;
 
-    protected Compte(Long id, String numero, double solde, Long idClient) {
-        this.id = id;
+    protected Compte(String numero, double solde, Long idClient) {
+        this.id = GenerateId.generateId();
         this.numero = numero;
         this.solde = solde;
         this.idClient = idClient;
