@@ -61,6 +61,23 @@ public class TransactionDAO {
         }
         return transactions;
     }
+    public List<Transaction> findByCompte(Long idCompte) throws SQLException {
+        List<Transaction> transactions = new ArrayList<>();
+        String sql = "SELECT * FROM transaction WHERE idcompte = ?";
+
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, idCompte);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    transactions.add(createTransactionFromResultSet(rs));
+                }
+            }
+        }
+        return transactions;
+    }
 
 
     private Transaction createTransactionFromResultSet(ResultSet rs) throws SQLException {
