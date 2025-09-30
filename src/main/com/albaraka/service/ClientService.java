@@ -57,4 +57,26 @@ public class ClientService {
         return compteDAO.findByClient(idClient).size();
     }
 
+    public String obtenirStatistiques(Long idClient) throws SQLException {
+        Optional<Client> clientOpt = Optional.ofNullable(clientDAO.findById(idClient));
+        if (clientOpt.isEmpty()) {
+            return "Client non trouve";
+        }
+
+        Client client = clientOpt.get();
+        List<Compte> comptes = compteDAO.findByClient(idClient);
+        double soldeTotal = calculerSoldeTotal(idClient);
+
+        return String.format(
+                "=== Statistiques du client %s ===\n" +
+                        "Email: %s\n" +
+                        "Nombre de comptes: %d\n" +
+                        "Solde total: %.2f €\n" +
+                client.name(),
+                client.email(),
+                comptes.size(),
+                soldeTotal
+        );
+    }
+
 }
