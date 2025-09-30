@@ -7,6 +7,8 @@ import main.com.albaraka.entity.CompteCourant;
 import main.com.albaraka.entity.CompteEpargne;
 
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Optional;
 
 public class CompteService {
 
@@ -34,6 +36,14 @@ public class CompteService {
 
     public void deleteCompte(Long id) throws SQLException {
         compteDAO.delete(id);
+    }
+
+    public Optional<Compte> rechercherParId(Long id) throws SQLException {
+        return compteDAO.findById(id);
+    }
+
+    public List<Compte> findAll() throws SQLException {
+        return compteDAO.findAll();
     }
 
 }
