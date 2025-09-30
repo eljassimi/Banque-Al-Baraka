@@ -2,11 +2,11 @@ package main.com.albaraka.dao;
 
 import main.com.albaraka.config.DatabaseConfig;
 import main.com.albaraka.entity.Transaction;
+import main.com.albaraka.entity.TypeTransaction;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TransactionDAO {
 
@@ -45,6 +45,33 @@ public class TransactionDAO {
                 throw new SQLException("Echec update la transaction avec id=" + transaction.id());
             }
         }
+    }
+
+    public List<Transaction> findAll() throws SQLException {
+        List<Transaction> transactions = new ArrayList<>();
+        String sql = "SELECT * FROM transaction";
+
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                transactions.add(createTransactionFromResultSet(rs));
+            }
+        }
+        return transactions;
+    }
+
+
+    private Transaction createTransactionFromResultSet(ResultSet rs) throws SQLException {
+        return new Transaction(
+                rs.getLong("id"),
+                rs.getTimestamp("date").toLocalDateTime(),
+                rs.getDouble("montant"),
+                TypeTransaction.valueOf(rs.getString("type")),
+                rs.getString("lieu"),
+                rs.getLong("idCompte")
+        );
     }
 
 
