@@ -47,4 +47,11 @@ public class ClientService {
         return clientDAO.findAll();
     }
 
+    public double calculerSoldeTotal(Long idClient) throws SQLException {
+        List<Compte> comptes = compteDAO.findByClient(idClient);
+        return comptes.stream()
+                .mapToDouble(Compte::getSolde)
+                .sum();
+    }
+
 }
