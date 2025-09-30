@@ -46,4 +46,8 @@ public class CompteService {
         return compteDAO.findAll();
     }
 
+    public boolean mettreAJourSolde(Long idCompte, double nouveauSolde) throws SQLException {
+        return compteDAO.updateSolde(idCompte, nouveauSolde);
+    }
+
 }

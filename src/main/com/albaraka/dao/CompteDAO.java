@@ -110,6 +110,18 @@ public class CompteDAO {
         }
     }
 
+    public boolean updateSolde(Long id, double nouveauSolde) throws SQLException {
+        String sql = "UPDATE compte SET solde = ? WHERE id = ?";
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setDouble(1, nouveauSolde);
+            stmt.setLong(2, id);
+
+            return stmt.executeUpdate() > 0;
+        }
+    }
+
     private Compte createCompteFromResultSet(ResultSet rs) throws SQLException {
         long id = rs.getLong("id");
         String numero = rs.getString("numero");
