@@ -1,5 +1,6 @@
 package main.com.albaraka.service;
 
+import main.com.albaraka.dao.ClientDAO;
 import main.com.albaraka.dao.TransactionDAO;
 import main.com.albaraka.entity.Compte;
 import main.com.albaraka.entity.Transaction;
@@ -9,6 +10,7 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class TransactionService {
@@ -42,5 +44,20 @@ public class TransactionService {
     public List<Transaction> filtrerParLieu(String lieu) throws SQLException {
         return transactionDAO.findAll().stream().filter(e->e.lieu().equals(lieu)).collect(Collectors.toList());
     }
+
+    public Map<TypeTransaction, List<Transaction>> regrouperParType() throws SQLException {
+        return transactionDAO.findAll().stream().collect(Collectors.groupingBy(Transaction::type));
+    }
+
+    public double calculerMoyenPerClient(Long idClient) throws SQLException {
+        List<Transaction> transaction = transactionDAO.findByClient(idClient);
+        return transaction.stream().collect(Collectors.averagingDouble(Transaction::montant));
+    }
+
+    public double calculerMoyenPerCompte(Long idCompte) throws SQLException {
+        List<Transaction> transaction = transactionDAO.findByClient(idCompte);
+        return transaction.stream().collect(Collectors.averagingDouble(Transaction::montant));
+    }
+
 
 }
