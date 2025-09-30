@@ -115,4 +115,21 @@ public class TransactionDAO {
     }
 
 
+    public List<Transaction> findByClient(Long idCompte) throws SQLException {
+        String sql = "SELECT * FROM transaction WHERE idClient = ?";
+        List<Transaction> transactions = new ArrayList<>();
+
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, idCompte);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    transactions.add(createTransactionFromResultSet(rs));
+                }
+            }
+        }
+        return transactions;
+    }
 }
