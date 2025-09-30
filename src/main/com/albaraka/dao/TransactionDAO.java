@@ -79,6 +79,16 @@ public class TransactionDAO {
         return transactions;
     }
 
+    public boolean delete(Long id) throws SQLException {
+        String sql = "DELETE FROM transaction WHERE id = ?";
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, id);
+            return stmt.executeUpdate() > 0;
+        }
+    }
+
 
     private Transaction createTransactionFromResultSet(ResultSet rs) throws SQLException {
         return new Transaction(
