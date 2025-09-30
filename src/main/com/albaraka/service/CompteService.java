@@ -49,5 +49,8 @@ public class CompteService {
     public boolean mettreAJourSolde(Long idCompte, double nouveauSolde) throws SQLException {
         return compteDAO.updateSolde(idCompte, nouveauSolde);
     }
+    public boolean mettreAJourParametres(Long idCompte, Double decouvertAutorise, Double tauxInteret) throws SQLException {
+        return compteDAO.updateParametres(idCompte, decouvertAutorise, tauxInteret);
+    }
 
 }

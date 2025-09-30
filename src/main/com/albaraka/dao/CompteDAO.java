@@ -122,6 +122,19 @@ public class CompteDAO {
         }
     }
 
+    public boolean updateParametres(Long id, Double decouvertAutorise, Double tauxInteret) throws SQLException {
+        String sql = "UPDATE compte SET decouvertAutorise = ?, tauxInteret = ? WHERE id = ?";
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setObject(1, decouvertAutorise);
+            stmt.setObject(2, tauxInteret);
+            stmt.setLong(3, id);
+
+            return stmt.executeUpdate() > 0;
+        }
+    }
+
     private Compte createCompteFromResultSet(ResultSet rs) throws SQLException {
         long id = rs.getLong("id");
         String numero = rs.getString("numero");
