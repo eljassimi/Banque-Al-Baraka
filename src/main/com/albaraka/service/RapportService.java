@@ -9,6 +9,7 @@ import main.com.albaraka.entity.Transaction;
 import main.com.albaraka.entity.TypeTransaction;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -92,6 +93,19 @@ public class RapportService {
         return suspectes.stream()
                 .sorted((t1, t2) -> t2.date().compareTo(t1.date()))
                 .collect(Collectors.toList());
+    }
+
+    public List<Compte> identifierComptesInactifs(LocalDateTime seuilDate) throws SQLException {
+        return compteDAO.findAll().stream()
+                .filter(compte -> {
+                    try {
+                        return transactionDAO.findByCompte(compte.getId())
+                                .stream()
+                                .noneMatch(t -> t.date().isAfter(seuilDate));
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                }).toList();
     }
 
 
