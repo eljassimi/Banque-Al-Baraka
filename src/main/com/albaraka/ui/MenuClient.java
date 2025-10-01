@@ -1,18 +1,20 @@
 package main.com.albaraka.ui;
 
+import main.com.albaraka.entity.Client;
 import main.com.albaraka.service.ClientService;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class MenuClient {
     private final ClientService clientService;
+    Scanner sc = new Scanner(System.in);
 
     public MenuClient() {
         this.clientService = new ClientService();
     }
 
     public void afficher(){
-        Scanner sc = new Scanner(System.in);
         boolean continuer = true;
 
         while (continuer) {
@@ -40,5 +42,23 @@ public class MenuClient {
                     default -> System.out.println("Choix invalide");
                 }
         }
+    }
+
+    private void ajouterClient() throws SQLException {
+        System.out.println("\n--- AJOUT D'UN CLIENT ---");
+
+        System.out.println("Nom du client :");
+        String nom = sc.nextLine();
+        System.out.println("Email du client :");
+        String email = sc.nextLine();
+
+        try {
+            clientService.validerClient(nom, email);
+            clientService.ajouterClient(nom, email);
+            System.out.println("Client ajoute avec succes avec id : ");
+        } catch (IllegalArgumentException e) {
+            System.err.println(e.getMessage());
+        }
+
     }
 }

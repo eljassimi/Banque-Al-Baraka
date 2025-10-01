@@ -26,6 +26,18 @@ public class ClientService {
         clientDAO.insert(client);
     }
 
+    public void validerClient(String nom, String email) {
+        if (nom == null || nom.trim().isEmpty()) {
+            throw new IllegalArgumentException("Le nom ne peut pas etre vide");
+        }
+        if (email == null || email.trim().isEmpty()) {
+            throw new IllegalArgumentException("L email ne peut pas etre vide");
+        }
+        if (!email.contains("@")) {
+            throw new IllegalArgumentException("L email doit contenir un @");
+        }
+    }
+
     public void modifierClient(Long id, String nom, String email) throws SQLException {
         Client client = new Client(id, nom, email);
         clientDAO.update(client);
