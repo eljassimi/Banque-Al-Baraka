@@ -4,6 +4,7 @@ import main.com.albaraka.entity.Client;
 import main.com.albaraka.service.ClientService;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -117,7 +118,24 @@ public class MenuClient {
         System.out.println("\n--- Rechercher par Nom ---");
         System.out.println("Entrer nom du client : ");
         String nom = sc.nextLine();
-        clientService.rechercherParNom(nom).stream().forEach(System.out::println);
+        List<Client> clients = clientService.rechercherParNom(nom);
+        if (clients.isEmpty()){
+            System.out.println("Client non trouve par ce nom : "+nom);
+            return;
+        }
+        clients.stream().forEach(System.out::println);
+    }
+
+    public void afficherStatistiques() throws SQLException {
+        System.out.println("\n--- Afficher statistiques ---");
+        System.out.println("Entrer id du client : ");
+        Long id = sc.nextLong();
+        Optional<Client> client = clientService.rechercherParId(id);
+        if (client.isEmpty()){
+            System.out.println("Client non trouve");
+            return;
+        }
+        clientService.obtenirStatistiques(id);
     }
 
 }
