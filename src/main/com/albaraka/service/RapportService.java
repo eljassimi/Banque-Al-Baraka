@@ -18,12 +18,14 @@ public class RapportService {
     private final ClientDAO clientDAO;
     private final CompteDAO compteDAO;
     private final TransactionDAO transactionDAO;
+    private final TransactionService transactionService;
 
 
-    public RapportService(ClientDAO clientDAO, CompteDAO compteDAO) {
+    public RapportService(ClientDAO clientDAO, CompteDAO compteDAO, TransactionDAO transactionDAO, TransactionService transactionService) {
         this.clientDAO = clientDAO;
         this.compteDAO = compteDAO;
-        this.transactionDAO = new TransactionDAO();
+        this.transactionDAO = transactionDAO;
+        this.transactionService = transactionService;
     }
 
     public List<Client> topFiveClient() throws SQLException {
@@ -69,6 +71,27 @@ public class RapportService {
 
         });
             return rapport.toString();
+    }
+
+    public List<Transaction> detecterTransactionsSuspectes(double seuilMontant, String paysHabituel, int nombreMaxParMinute) throws SQLException {
+        List<Transaction> suspectes = new ArrayList<>();
+
+        List<Transaction> montantEleve = transactionService.detecterTransactionsSuspectes(seuilMontant);
+        suspectes.addAll(montantEleve);
+
+        List<Transaction> lieuxInhabituels = transactionService.detecterLieuxInhabituels(paysHabituel);
+        suspectes.addAll(lieuxInhabituels);
+
+        List<Compte> comptes = compteDAO.findAll();
+        for (Compte compte : comptes) {
+            List<Transaction> frequenceExcessive = transactionService.detecterFrequenceExcessive(
+                    compte.getId(), nombreMaxParMinute);
+            suspectes.addAll(frequenceExcessive);
+        }
+
+        return suspectes.stream()
+                .sorted((t1, t2) -> t2.date().compareTo(t1.date()))
+                .collect(Collectors.toList());
     }
 
 
