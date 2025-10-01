@@ -8,6 +8,8 @@ import main.com.albaraka.entity.TypeTransaction;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -67,6 +69,21 @@ public class TransactionService {
         return transactionDAO.findAll().stream()
                 .filter(t -> !t.lieu().toLowerCase().contains(lieu.toLowerCase()))
                 .collect(Collectors.toList());
+    }
+
+    public List<Transaction> detecterFrequenceExcessive(Long idCompte, int nombreMaxParMinute) throws SQLException {
+
+        List<Transaction> transactions = transactionDAO.findByCompte(idCompte);
+        List<Transaction> suspectes = new ArrayList<>();
+
+        Map<LocalDateTime, List<Transaction>> parMinute = transactions.stream()
+                .collect(Collectors.groupingBy(t -> t.date().truncatedTo(ChronoUnit.MINUTES)));
+
+        parMinute.entrySet().stream()
+                .filter(e -> e.getValue().size() > nombreMaxParMinute)
+                .forEach(e -> suspectes.addAll(e.getValue()));
+
+        return suspectes;
     }
 
 
