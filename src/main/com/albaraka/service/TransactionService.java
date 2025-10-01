@@ -59,5 +59,16 @@ public class TransactionService {
         return transaction.stream().collect(Collectors.averagingDouble(Transaction::montant));
     }
 
+    public List<Transaction> detecterTransactionsSuspectes(double seuilMontant) throws SQLException {
+        return transactionDAO.findAll().stream().filter(e->e.montant()>seuilMontant).collect(Collectors.toList());
+    }
+
+    public List<Transaction> detecterLieuxInhabituels(String lieu) throws SQLException {
+        return transactionDAO.findAll().stream()
+                .filter(t -> !t.lieu().toLowerCase().contains(lieu.toLowerCase()))
+                .collect(Collectors.toList());
+    }
+
+
 
 }
