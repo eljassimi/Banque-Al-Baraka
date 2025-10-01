@@ -55,6 +55,10 @@ public class ClientService {
         return Optional.ofNullable(clientDAO.findById(id));
     }
 
+    public List<Client> rechercherParNom(String nom) throws SQLException {
+        return clientDAO.findAll().stream().filter(e->e.name().equals(nom)).toList();
+    }
+
     public List<Client> listerTousLesClients() throws SQLException {
         return clientDAO.findAll();
     }

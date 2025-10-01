@@ -96,4 +96,28 @@ public class MenuClient {
         clientService.supprimerClient(id);
         System.out.println("Client supprime avec succes avec id : "+id);
     }
+
+    public void rechercherParId() throws SQLException {
+        System.out.println("\n--- Rechercher par ID ---");
+        System.out.println("Entrer id du client : ");
+        Long id = sc.nextLong();
+        Optional<Client> client = clientService.rechercherParId(id);
+        if (client.isEmpty()){
+            System.out.println("Client non trouve");
+            return;
+        }
+        System.out.println("Client trouvé");
+        client.stream().forEach(System.out::println);
+    }
+    public void listerTousLesClients() throws SQLException {
+        System.out.println("\n--- Lister tous les clients ---");
+        clientService.listerTousLesClients().stream().forEach(e->System.out.println("Nom du client : "+e.name()+"\nEmail du client : "+e.email()));
+    }
+    public void rechercherParNom()throws SQLException {
+        System.out.println("\n--- Rechercher par Nom ---");
+        System.out.println("Entrer nom du client : ");
+        String nom = sc.nextLine();
+        clientService.rechercherParNom(nom).stream().forEach(System.out::println);
+    }
+
 }
