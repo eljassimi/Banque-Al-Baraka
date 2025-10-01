@@ -2,24 +2,28 @@ package main.com.albaraka.service;
 
 import main.com.albaraka.dao.ClientDAO;
 import main.com.albaraka.dao.CompteDAO;
+import main.com.albaraka.dao.TransactionDAO;
 import main.com.albaraka.entity.Client;
 import main.com.albaraka.entity.Compte;
+import main.com.albaraka.entity.Transaction;
+import main.com.albaraka.entity.TypeTransaction;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class RapportService {
 
     private final ClientDAO clientDAO;
     private final CompteDAO compteDAO;
+    private final TransactionDAO transactionDAO;
 
 
     public RapportService(ClientDAO clientDAO, CompteDAO compteDAO) {
         this.clientDAO = clientDAO;
         this.compteDAO = compteDAO;
+        this.transactionDAO = new TransactionDAO();
     }
 
     public List<Client> topFiveClient() throws SQLException {
@@ -29,6 +33,42 @@ public class RapportService {
             clients.add(clientDAO.findById(compte.getIdClient()));
         }
         return clients;
+    }
+
+    public String GenerateRapportMonsuel(int mois, int annee) throws SQLException {
+        LocalDateTime debutDeMois = LocalDateTime.of(annee,mois,1,0,0);
+        LocalDateTime finDeMois = debutDeMois.plusMonths(1);
+
+        List<Transaction> transactions  = transactionDAO.findAll().stream().filter(e->e.date().isAfter(debutDeMois) && e.date().isBefore(finDeMois)).toList();
+
+        Map<TypeTransaction, List<Transaction>> parType =transactions.stream().collect(Collectors.groupingBy(Transaction::type));
+        StringBuilder rapport = new StringBuilder();
+        rapport.append(String.format("--- RAPPORT MENSUEL %d-%02d ===\n", annee, mois));
+
+        rapport.append(String.format("--- RAPPORT PAR TYPE %d-%02d ===\n", annee, mois));
+        parType.forEach((type, trans) -> {
+
+            long nombre = trans.size();
+            double total = trans.stream().mapToDouble(Transaction::montant).sum();
+            double moyenne = trans.stream().mapToDouble(Transaction::montant).average().orElse(0.0);
+
+            rapport.append(String.format("%s:\n", type));
+            rapport.append(String.format("  Nombre: %d\n", nombre));
+            rapport.append(String.format("  Total: %.2f €\n", total));
+            rapport.append(String.format("  Moyenne: %.2f €\n\n", moyenne));
+
+            long totalTransactions = transactions.size();
+            double volumeTotal = transactions.stream().mapToDouble(Transaction::montant).sum();
+            double moyenneGlobale = transactions.stream().mapToDouble(Transaction::montant).average().orElse(0.0);
+
+            rapport.append("--- RESUME GLOBAL ---\n");
+            rapport.append(String.format("Total des transactions: %d\n", totalTransactions));
+            rapport.append(String.format("Volume total: %.2f €\n", volumeTotal));
+            rapport.append(String.format("Moyenne par transaction: %.2f €\n", moyenneGlobale));
+
+
+        });
+            return rapport.toString();
     }
 
 
