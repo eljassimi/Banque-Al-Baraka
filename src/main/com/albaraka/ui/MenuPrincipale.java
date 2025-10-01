@@ -1,5 +1,6 @@
 package main.com.albaraka.ui;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class MenuPrincipale {
@@ -9,7 +10,7 @@ public class MenuPrincipale {
         this.menuClient = new MenuClient();
     }
 
-    public void afficher() {
+    public void afficher() throws SQLException {
         Scanner sc = new Scanner(System.in);
         boolean continuer = true;
 

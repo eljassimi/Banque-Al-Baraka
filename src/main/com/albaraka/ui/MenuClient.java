@@ -4,6 +4,7 @@ import main.com.albaraka.entity.Client;
 import main.com.albaraka.service.ClientService;
 
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class MenuClient {
@@ -14,7 +15,7 @@ public class MenuClient {
         this.clientService = new ClientService();
     }
 
-    public void afficher(){
+    public void afficher() throws SQLException {
         boolean continuer = true;
 
         while (continuer) {
@@ -59,6 +60,29 @@ public class MenuClient {
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());
         }
+    }
+
+    private void modifierClient() throws SQLException {
+        System.out.println("\n--- Modifier D'UN CLIENT ---");
+        System.out.println("Entrer id du client : ");
+        Long id = sc.nextLong();
+
+        Optional<Client> client = clientService.rechercherParId(id);
+        if (client.isEmpty()){
+            System.out.println("Client non trouve");
+            return;
+        }
+        System.out.println("Entrer nouveau nom du client : ");
+        String nom = sc.nextLine();
+        System.out.println("Entrer nouveau email du client : ");
+        String email = sc.nextLine();
+        try {
+            clientService.validerClient(nom, email);
+            clientService.modifierClient(id, nom, email);
+        }catch (IllegalArgumentException e) {
+            System.err.println(e.getMessage());
+        }
+
 
     }
 }
