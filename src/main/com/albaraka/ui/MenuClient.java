@@ -82,7 +82,18 @@ public class MenuClient {
         }catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());
         }
+    }
 
-
+    private void supprimerClient() throws SQLException {
+        System.out.println("\n--- Supprimer D'UN CLIENT ---");
+        System.out.println("Entrer id du client : ");
+        Long id = sc.nextLong();
+        Optional<Client> client = clientService.rechercherParId(id);
+        if (client.isEmpty()){
+            System.out.println("Client non trouve");
+            return;
+        }
+        clientService.supprimerClient(id);
+        System.out.println("Client supprime avec succes avec id : "+id);
     }
 }
