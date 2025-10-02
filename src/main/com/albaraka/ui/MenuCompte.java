@@ -98,4 +98,28 @@ public class MenuCompte {
         compteService.effectuerVersement(numero,montant,lieu);
 
     }
+
+    public void effectuerRetrait()throws SQLException{
+        System.out.println("========= RETRAIT A COMPTE ==========");
+        System.out.println("Entrer le numero du compte :");
+        String numero = sc.nextLine();
+        System.out.println("Entrer le Montant : ");
+        Double montant = sc.nextDouble();
+        System.out.println("Entrer le lieu : ");
+        String lieu = sc.nextLine();
+        compteService.effectuerRetrait(numero,montant,lieu);
+    }
+
+    public void effectuerVirement()throws SQLException{
+        System.out.println("===== VIREMENT ENTRE COMPTE ET COMPTE ======");
+        System.out.println("Entrer le numero de compte source : ");
+        String numeroSrc = sc.nextLine();
+        System.out.println("Entrer le numero de compte distinataire : ");
+        String numeroDst = sc.nextLine();
+        System.out.println("Entrer le Montant : ");
+        Double montant = sc.nextDouble();
+        System.out.println("Entrer le lieu : ");
+        String lieu = sc.nextLine();
+        compteService.effecturtVirement(numeroSrc,numeroDst,montant,lieu);
+    }
 }
