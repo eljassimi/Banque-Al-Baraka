@@ -129,7 +129,22 @@ public class MenuCompte {
         Long id = sc.nextLong();
         Optional<Compte> compteOpt = compteService.rechercherParId(id);
         if (compteOpt.isEmpty()){
-            throw new IllegalArgumentException("Aucun Compte de ce id"+id);
+            throw new IllegalArgumentException("Aucun Compte de ce id :"+id);
+        }
+        Compte compte = compteOpt.get();
+        StringBuilder affiche = new StringBuilder();
+        affiche.append("ID du Compte : "+compte.getId());
+        affiche.append("\nNumero du compte : "+compte.getNumero());
+        affiche.append("\nSolde du compte : "+compte.getSolde());
+        System.out.println(affiche);
+    }
+
+    public void rechercherParNumero()throws Exception{
+        System.out.println("Entrer le Numero Du Compte : ");
+        String numero = sc.nextLine();
+        Optional<Compte> compteOpt = compteService.rechercherParNumero(numero);
+        if (compteOpt.isEmpty()){
+            throw new IllegalArgumentException("Aucun Compte de ce numero : "+numero);
         }
         Compte compte = compteOpt.get();
         StringBuilder affiche = new StringBuilder();

@@ -42,6 +42,9 @@ public class CompteService {
     public Optional<Compte> rechercherParId(Long id) throws SQLException {
         return compteDAO.findById(id);
     }
+    public Optional<Compte> rechercherParNumero(String Numero) throws SQLException{
+        return compteDAO.findByNumero(Numero);
+    }
 
     public List<Compte> findAll() throws SQLException {
         return compteDAO.findAll();
