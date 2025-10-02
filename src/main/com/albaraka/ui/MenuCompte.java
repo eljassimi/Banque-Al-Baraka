@@ -169,4 +169,13 @@ public class MenuCompte {
         System.out.println(compteService.obtenirStatistiques(id));
     }
 
+    public void afficherCompteMaxSolde() throws SQLException {
+        System.out.println("===== AFFICHE COMPTE AVEC MAX SOLDE =====");
+        System.out.println(compteService.trouverCompteMaxSolde());
+    }
+    public void afficherCompteMinSolde() throws Exception{
+        System.out.println("===== AFFICHE COMPTE AVEC MIN SOLDE =====");
+        System.out.println(compteService.trouverCompteMinSolde());
+    }
+
 }
