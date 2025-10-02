@@ -1,8 +1,11 @@
 package main.com.albaraka.ui;
 
+import main.com.albaraka.entity.Compte;
+import main.com.albaraka.entity.CompteCourant;
 import main.com.albaraka.service.ClientService;
 import main.com.albaraka.service.CompteService;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class MenuCompte {
@@ -53,5 +56,46 @@ public class MenuCompte {
                 System.err.println("Erreur: " + e.getMessage());
             }
         }
+    }
+
+    public void creerCompteCourant() throws SQLException {
+        System.out.println("====== Creation de compte courant ======");
+        System.out.println("Entrer le Numero du compte : ");
+        String numero = sc.nextLine();
+        System.out.println("Entrer le id du client de ce compte : ");
+        Long idClient = sc.nextLong();
+        System.out.println("Entrer le Solde Initial de ce compte : ");
+        Double solde = sc.nextDouble();
+        System.out.println("Entrer le decouvert autorisé dans ce compte : ");
+        Double devouvert  = sc.nextDouble();
+        compteService.creerCompteCourant(numero,solde,idClient,devouvert);
+        System.out.println("Compte Courant a ete crée");
+    }
+
+    public void creerCompteEpargne() throws SQLException {
+        System.out.println("====== Creation de compte Epargne ======");
+        System.out.println("Entrer le Numero du compte : ");
+        String numero = sc.nextLine();
+        System.out.println("Entrer le id du client de ce compte : ");
+        Long idClient = sc.nextLong();
+        System.out.println("Entrer le Solde Initial de ce compte : ");
+        Double solde = sc.nextDouble();
+        System.out.println("Entrer le taux d'intret de ce compte : ");
+        Double tauxInteret = sc.nextDouble();
+        compteService.creerCompteEpargne(numero,solde,idClient,tauxInteret);
+        System.out.println("Compte Courant a ete crée");
+    }
+
+    public void effectuerVersement()throws SQLException{
+        System.out.println("======= VERSEMENT A UN COMPTE =======");
+        System.out.println("Entrer le numero du compte :");
+        String numero = sc.nextLine();
+        System.out.println("Entrer le Montant : ");
+        Double montant = sc.nextDouble();
+        System.out.println("Entrer le lieu : ");
+        String lieu = sc.nextLine();
+
+        compteService.effectuerVersement(numero,montant,lieu);
+
     }
 }

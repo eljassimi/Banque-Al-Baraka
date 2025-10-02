@@ -2,11 +2,10 @@ package main.com.albaraka.service;
 
 import main.com.albaraka.dao.CompteDAO;
 import main.com.albaraka.dao.TransactionDAO;
-import main.com.albaraka.entity.Compte;
-import main.com.albaraka.entity.CompteCourant;
-import main.com.albaraka.entity.CompteEpargne;
+import main.com.albaraka.entity.*;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -68,6 +67,24 @@ public class CompteService {
         List<Compte> comptes = compteDAO.findAll();
         return comptes.stream()
                 .min(Comparator.comparingDouble(Compte::getSolde));
+    }
+
+    public void effectuerVersement(String numero,Double montant,String lieu) throws SQLException {
+        Optional<Compte> compte = compteDAO.findByNumero(numero);
+        if (compte.isEmpty()){
+            throw new SQLException("Aucun Compte avec ce numro !");
+        }
+
+        Double newSolde = compte.get().getSolde() + montant;
+        boolean SoldeUpdate = mettreAJourSolde(compte.get().getId(),newSolde);
+
+        if (!SoldeUpdate){
+            throw new SQLException("Echec de mis a jour solde");
+        }
+
+        Transaction transaction = new Transaction(LocalDateTime.now(),montant, TypeTransaction.VERSEMENT, lieu, compte.get().getId());
+        transactionDAO.insert(transaction);
+
     }
 
 

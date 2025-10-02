@@ -110,6 +110,17 @@ public class CompteDAO {
         }
     }
 
+    public Optional<Compte> findByNumero(String numero)throws SQLException{
+        String sql = "SELECT * FROM compt where numero = ?";
+        try(Connection c = DatabaseConfig.getConnection();PreparedStatement ps = c.prepareStatement(sql)){
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                return Optional.of(createCompteFromResultSet(rs));
+            }
+            return Optional.empty();
+        }
+    }
+
     public boolean updateSolde(Long id, double nouveauSolde) throws SQLException {
         String sql = "UPDATE compte SET solde = ? WHERE id = ?";
         try (Connection conn = DatabaseConfig.getConnection();
