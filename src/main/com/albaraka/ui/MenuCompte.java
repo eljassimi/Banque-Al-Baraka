@@ -1,11 +1,13 @@
 package main.com.albaraka.ui;
 
+import main.com.albaraka.entity.Client;
 import main.com.albaraka.entity.Compte;
 import main.com.albaraka.entity.CompteCourant;
 import main.com.albaraka.service.ClientService;
 import main.com.albaraka.service.CompteService;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -153,4 +155,18 @@ public class MenuCompte {
         affiche.append("\nSolde du compte : "+compte.getSolde());
         System.out.println(affiche);
     }
+
+    public void listerComptesClient() throws SQLException{
+        System.out.println("Entrer id du client : ");
+        long id = sc.nextLong();
+        compteService.rechercherParClient(id).forEach(System.out::println);
+    }
+
+    public void afficherStatistiques() throws SQLException {
+        System.out.println("===== AFFICHE STATS =====");
+        System.out.println("Entrer ID du Compte :");
+        Long id = sc.nextLong();
+        System.out.println(compteService.obtenirStatistiques(id));
+    }
+
 }

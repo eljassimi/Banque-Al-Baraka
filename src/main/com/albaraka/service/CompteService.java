@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalDouble;
+import java.util.stream.Collectors;
 
 public class CompteService {
 
@@ -147,6 +149,30 @@ public class CompteService {
         Transaction transaction2 = new Transaction(LocalDateTime.now(),montant, TypeTransaction.VIREMENT, lieu + " (de " + compteSrc.getNumero() + ")", compteSrc.getId());
         transactionDAO.insert(transaction1);
         transactionDAO.insert(transaction2);
+    }
+
+    public String obtenirStatistiques(Long idCompte) throws SQLException {
+        Optional<Compte> compteOpt = compteDAO.findById(idCompte);
+        if (compteOpt.isEmpty()) {
+            return "Compte non trouve";
+        }
+
+        Compte compte = compteOpt.get();
+        List<Transaction> transactions = transactionDAO.findByCompte(idCompte);
+        double totalTransactions = transactions.stream().mapToDouble(Transaction::montant).sum();
+        double moyenneTransactions = transactions.stream().mapToDouble(Transaction::montant).average().getAsDouble();
+
+        StringBuilder stats = new StringBuilder("=== Statistiques du compte %s ===\n");
+        stats.append("Solde : "+compte.getSolde()+"\n");
+        stats.append("Nombre de transactions: "+ transactions.size()+"\n");
+        stats.append("Total des transactions: "+ totalTransactions+"\n");
+        stats.append("Moyenne des transactions: "+ moyenneTransactions+"\n");
+        if(compte instanceof CompteCourant){
+        stats.append("Decouvert autorisé: "+ ((CompteCourant) compte).getDecouvertAutorise()+"\n");
+        }else{
+        stats.append("Taux d interet: "+ ((CompteEpargne) compte).getTauxInteret()+"\n");
+        }
+        return stats.toString();
     }
 
 
