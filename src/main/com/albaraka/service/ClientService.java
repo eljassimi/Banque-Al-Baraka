@@ -78,19 +78,18 @@ public class ClientService {
         if (clientOpt.isEmpty()) {
             return "Client non trouve";
         }
-
         Client client = clientOpt.get();
-        List<Compte> comptes = compteDAO.findByClient(idClient);
+        int NumberComptes = calculerNombreCompte(idClient);
         double soldeTotal = calculerSoldeTotal(idClient);
 
         return String.format(
                 "=== Statistiques du client %s ===\n" +
                         "Email: %s\n" +
                         "Nombre de comptes: %d\n" +
-                        "Solde total: %.2f €\n" +
+                        "Solde total: %.2f €\n",
                 client.name(),
                 client.email(),
-                comptes.size(),
+                NumberComptes,
                 soldeTotal
         );
     }

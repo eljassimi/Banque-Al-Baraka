@@ -12,10 +12,11 @@ import java.util.List;
 public class ClientDAO {
     
     public void insert(Client client) throws SQLException {
-        String sql = "INSERT INTO client (name, email) VALUES (?, ?)";
+        String sql = "INSERT INTO public.client(id,nom, email) VALUES (?, ?,?)";
         try (Connection c = DatabaseConfig.getConnection(); PreparedStatement stmt = c.prepareStatement(sql)) {
-            stmt.setString(1, client.name());
-            stmt.setString(2, client.email());
+            stmt.setLong(1,client.id());
+            stmt.setString(2, client.name());
+            stmt.setString(3, client.email());
             stmt.executeUpdate();
         }
     }
@@ -26,6 +27,7 @@ public class ClientDAO {
             stmt.setString(1, client.name());
             stmt.setString(2, client.email());
             stmt.setLong(3, client.id());
+            stmt.executeUpdate();
         }
     }
 
@@ -33,6 +35,7 @@ public class ClientDAO {
         String sql = "DELETE FROM client WHERE id = ?";
         try (Connection c = DatabaseConfig.getConnection(); PreparedStatement stmt = c.prepareStatement(sql)) {
             stmt.setLong(1, id);
+            stmt.executeUpdate();
         }
     }
     public List<Client> findAll() throws SQLException {
@@ -41,7 +44,7 @@ public class ClientDAO {
         try (Connection c = DatabaseConfig.getConnection(); PreparedStatement stmt = c.prepareStatement(sql)) {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                Client client = new Client(rs.getLong("id"), rs.getString("name"), rs.getString("email"));
+                Client client = new Client(rs.getLong("id"), rs.getString("nom"), rs.getString("email"));
                 clients.add(client);
             }
         }
@@ -54,7 +57,7 @@ public class ClientDAO {
             stmt.setLong(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return new Client(rs.getLong("id"), rs.getString("name"), rs.getString("email"));
+                return new Client(rs.getLong("id"), rs.getString("nom"), rs.getString("email"));
             }
         }
         return null;

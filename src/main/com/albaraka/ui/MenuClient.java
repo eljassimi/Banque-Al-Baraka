@@ -48,7 +48,7 @@ public class MenuClient {
 
     private void ajouterClient() throws SQLException {
         System.out.println("\n--- AJOUT D'UN CLIENT ---");
-
+        sc.nextLine();
         System.out.println("Nom du client :");
         String nom = sc.nextLine();
         System.out.println("Email du client :");
@@ -67,6 +67,7 @@ public class MenuClient {
         System.out.println("\n--- Modifier D'UN CLIENT ---");
         System.out.println("Entrer id du client : ");
         Long id = sc.nextLong();
+        sc.nextLine();
 
         Optional<Client> client = clientService.rechercherParId(id);
         if (client.isEmpty()){
@@ -83,6 +84,7 @@ public class MenuClient {
         }catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());
         }
+        System.out.println("Client modifie avec succes");
     }
 
     private void supprimerClient() throws SQLException {
@@ -112,10 +114,11 @@ public class MenuClient {
     }
     public void listerTousLesClients() throws SQLException {
         System.out.println("\n--- Lister tous les clients ---");
-        clientService.listerTousLesClients().stream().forEach(e->System.out.println("Nom du client : "+e.name()+"\nEmail du client : "+e.email()));
+        clientService.listerTousLesClients().stream().forEach(e->System.out.println("-------------\n"+"Nom du client : "+e.name()+"\nEmail du client : "+e.email()));
     }
     public void rechercherParNom()throws SQLException {
         System.out.println("\n--- Rechercher par Nom ---");
+        sc.nextLine();
         System.out.println("Entrer nom du client : ");
         String nom = sc.nextLine();
         List<Client> clients = clientService.rechercherParNom(nom);
@@ -135,7 +138,8 @@ public class MenuClient {
             System.out.println("Client non trouve");
             return;
         }
-        clientService.obtenirStatistiques(id);
+        String stats = clientService.obtenirStatistiques(id);
+        System.out.println(stats);
     }
 
 }
