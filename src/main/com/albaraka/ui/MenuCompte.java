@@ -6,6 +6,7 @@ import main.com.albaraka.service.ClientService;
 import main.com.albaraka.service.CompteService;
 
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class MenuCompte {
@@ -110,7 +111,7 @@ public class MenuCompte {
         compteService.effectuerRetrait(numero,montant,lieu);
     }
 
-    public void effectuerVirement()throws SQLException{
+    public void effectuerVirement() throws Exception {
         System.out.println("===== VIREMENT ENTRE COMPTE ET COMPTE ======");
         System.out.println("Entrer le numero de compte source : ");
         String numeroSrc = sc.nextLine();
@@ -121,5 +122,20 @@ public class MenuCompte {
         System.out.println("Entrer le lieu : ");
         String lieu = sc.nextLine();
         compteService.effecturtVirement(numeroSrc,numeroDst,montant,lieu);
+    }
+
+    public void rechercherParId() throws Exception{
+        System.out.println("Entrer l'id Du Compte : ");
+        Long id = sc.nextLong();
+        Optional<Compte> compteOpt = compteService.rechercherParId(id);
+        if (compteOpt.isEmpty()){
+            throw new IllegalArgumentException("Aucun Compte de ce id"+id);
+        }
+        Compte compte = compteOpt.get();
+        StringBuilder affiche = new StringBuilder();
+        affiche.append("ID du Compte : "+compte.getId());
+        affiche.append("\nNumero du compte : "+compte.getNumero());
+        affiche.append("\nSolde du compte : "+compte.getSolde());
+        System.out.println(affiche);
     }
 }
