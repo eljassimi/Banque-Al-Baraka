@@ -5,9 +5,11 @@ import java.util.Scanner;
 
 public class MenuPrincipale {
     private final MenuClient menuClient;
+    private final MenuCompte menuCompte;
 
     public MenuPrincipale() {
         this.menuClient = new MenuClient();
+        this.menuCompte = new MenuCompte();
     }
 
     public void afficher() throws SQLException {
@@ -26,6 +28,7 @@ public class MenuPrincipale {
 
                 switch (choix) {
                     case 1 -> menuClient.afficher();
+                    case 2 ->menuCompte.afficher();
                     case 0 -> {
                         continuer = false;
                         System.out.println("------ Application Closed ------");
