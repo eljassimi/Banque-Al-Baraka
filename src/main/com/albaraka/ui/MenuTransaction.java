@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class MenuTransaction {
@@ -107,6 +108,40 @@ public class MenuTransaction {
         afficherTransactions(transactions);
     }
 
+    public void filtrerParLieu() throws SQLException{
+        System.out.println("\n--- TRANSACTIONS FILTRER PAR Lieu ---");
+        System.out.println("Entrer le Lieu : ");
+        String lieu = sc.nextLine();
+        List<Transaction> transactions = transactionService.filtrerParLieu(lieu);
+        afficherTransactions(transactions);
+    }
+
+    private void regrouperParType() throws SQLException {
+        System.out.println("\n--- REGROUPEMENT PAR TYPE ---");
+
+        transactionService.regrouperParType()
+                .forEach((type, transactions) -> {
+                    double total = transactions.stream().mapToDouble(Transaction::montant).sum();
+                    System.out.printf("\n%s:\n  Nombre: %d\n  Total: %s\n  Moyenne: %s\n",
+                            type,
+                            transactions.size(),
+                            FormatUtil.formaterMontant(total),
+                            FormatUtil.formaterMontant(total / transactions.size()));
+                });
+    }
+
+    private void regrouperParPeriode()throws Exception{
+        System.out.println("\n--- REGROUPEMENT PAR Periode ---");
+        transactionService.regrouperParType()
+                .forEach((type, transactions) -> {
+                    double total = transactions.stream().mapToDouble(Transaction::montant).sum();
+                    System.out.printf("\n%s:\n  Nombre: %d\n  Total: %s\n  Moyenne: %s\n",
+                            type,
+                            transactions.size(),
+                            FormatUtil.formaterMontant(total),
+                            FormatUtil.formaterMontant(total / transactions.size()));
+                });
+    }
 
 
     private void afficherTransactions(List<Transaction> transactions) {
