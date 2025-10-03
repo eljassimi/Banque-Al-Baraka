@@ -19,7 +19,7 @@ Ce dépôt contient l'architecture en couches : UI (console), Services (logique 
 
 ## Diagramme de classes
 
-![Diagramme de classes](https://postimg.cc/r03fRnGG)
+[Digramme de classe](https://postimg.cc/r03fRnGG)
 
 ---
 
