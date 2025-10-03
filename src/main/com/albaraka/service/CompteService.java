@@ -81,6 +81,7 @@ public class CompteService {
             throw new SQLException("Aucun Compte avec ce numro !");
         }
 
+        System.out.println("DEBUG - ID du compte trouvé : " + compte.get().getId());
         Double newSolde = compte.get().getSolde() + montant;
         boolean SoldeUpdate = mettreAJourSolde(compte.get().getId(),newSolde);
 

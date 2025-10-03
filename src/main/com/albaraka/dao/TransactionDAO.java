@@ -11,14 +11,15 @@ import java.util.List;
 public class TransactionDAO {
 
     public void insert(Transaction transaction) throws SQLException{
-         String sql = "INSERT INTO transaction (date, montant, type, lieu, idCompte) VALUES (?, ?, ?, ?, ?)";
+         String sql = "INSERT INTO transaction (id,date, montant, type, lieu, idCompte) VALUES (?,?, ?, ?::type_transaction, ?, ?)";
          try(Connection c = DatabaseConfig.getConnection(); PreparedStatement stmt = c.prepareStatement(sql)){
 
-             stmt.setTimestamp(1, Timestamp.valueOf(transaction.date()));
-             stmt.setDouble(2, transaction.montant());
-             stmt.setString(3, transaction.type().name());
-             stmt.setString(4, transaction.lieu());
-             stmt.setLong(5, transaction.idCompte());
+             stmt.setLong(1,transaction.id());
+             stmt.setTimestamp(2, Timestamp.valueOf(transaction.date()));
+             stmt.setDouble(3, transaction.montant());
+             stmt.setString(4, transaction.type().name());
+             stmt.setString(5, transaction.lieu());
+             stmt.setLong(6, transaction.idCompte());
 
              int affectedRows = stmt.executeUpdate();
              if (affectedRows == 0) {

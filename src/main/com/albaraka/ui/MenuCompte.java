@@ -63,6 +63,7 @@ public class MenuCompte {
 
     public void creerCompteCourant() throws SQLException {
         System.out.println("====== Creation de compte courant ======");
+        sc.nextLine();
         System.out.println("Entrer le Numero du compte : ");
         String numero = sc.nextLine();
         System.out.println("Entrer le id du client de ce compte : ");
@@ -77,6 +78,7 @@ public class MenuCompte {
 
     public void creerCompteEpargne() throws SQLException {
         System.out.println("====== Creation de compte Epargne ======");
+        sc.nextLine();
         System.out.println("Entrer le Numero du compte : ");
         String numero = sc.nextLine();
         System.out.println("Entrer le id du client de ce compte : ");
@@ -91,23 +93,29 @@ public class MenuCompte {
 
     public void effectuerVersement()throws SQLException{
         System.out.println("======= VERSEMENT A UN COMPTE =======");
+        sc.nextLine();
         System.out.println("Entrer le numero du compte :");
         String numero = sc.nextLine();
         System.out.println("Entrer le Montant : ");
         Double montant = sc.nextDouble();
+        sc.nextLine();
         System.out.println("Entrer le lieu : ");
         String lieu = sc.nextLine();
-
+        try{
         compteService.effectuerVersement(numero,montant,lieu);
-
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
     }
 
     public void effectuerRetrait()throws SQLException{
         System.out.println("========= RETRAIT A COMPTE ==========");
+        sc.nextLine();
         System.out.println("Entrer le numero du compte :");
         String numero = sc.nextLine();
         System.out.println("Entrer le Montant : ");
         Double montant = sc.nextDouble();
+        sc.nextLine();
         System.out.println("Entrer le lieu : ");
         String lieu = sc.nextLine();
         compteService.effectuerRetrait(numero,montant,lieu);
@@ -115,18 +123,22 @@ public class MenuCompte {
 
     public void effectuerVirement() throws Exception {
         System.out.println("===== VIREMENT ENTRE COMPTE ET COMPTE ======");
+        sc.nextLine();
         System.out.println("Entrer le numero de compte source : ");
         String numeroSrc = sc.nextLine();
         System.out.println("Entrer le numero de compte distinataire : ");
         String numeroDst = sc.nextLine();
         System.out.println("Entrer le Montant : ");
         Double montant = sc.nextDouble();
+        sc.nextLine();
         System.out.println("Entrer le lieu : ");
         String lieu = sc.nextLine();
         compteService.effecturtVirement(numeroSrc,numeroDst,montant,lieu);
     }
 
     public void rechercherParId() throws Exception{
+        System.out.println("======= RECHERCHE UN COMPTE PAR ID =======");
+        sc.nextLine();
         System.out.println("Entrer l'id Du Compte : ");
         Long id = sc.nextLong();
         Optional<Compte> compteOpt = compteService.rechercherParId(id);
@@ -142,6 +154,8 @@ public class MenuCompte {
     }
 
     public void rechercherParNumero()throws Exception{
+        System.out.println("======= RECHERCHE UN COMPTE PAR NUMERO =======");
+        sc.nextLine();
         System.out.println("Entrer le Numero Du Compte : ");
         String numero = sc.nextLine();
         Optional<Compte> compteOpt = compteService.rechercherParNumero(numero);
@@ -157,6 +171,8 @@ public class MenuCompte {
     }
 
     public void listerComptesClient() throws SQLException{
+        System.out.println("======= LISTER TOUS LES COMPTE D'UN CLIENT =======");
+        sc.nextLine();
         System.out.println("Entrer id du client : ");
         long id = sc.nextLong();
         compteService.rechercherParClient(id).forEach(System.out::println);
@@ -164,6 +180,7 @@ public class MenuCompte {
 
     public void afficherStatistiques() throws SQLException {
         System.out.println("===== AFFICHE STATS =====");
+        sc.nextLine();
         System.out.println("Entrer ID du Compte :");
         Long id = sc.nextLong();
         System.out.println(compteService.obtenirStatistiques(id));
@@ -171,10 +188,12 @@ public class MenuCompte {
 
     public void afficherCompteMaxSolde() throws SQLException {
         System.out.println("===== AFFICHE COMPTE AVEC MAX SOLDE =====");
+        sc.nextLine();
         System.out.println(compteService.trouverCompteMaxSolde());
     }
     public void afficherCompteMinSolde() throws Exception{
         System.out.println("===== AFFICHE COMPTE AVEC MIN SOLDE =====");
+        sc.nextLine();
         System.out.println(compteService.trouverCompteMinSolde());
     }
 

@@ -8,6 +8,11 @@ public final class CompteCourant extends Compte {
         this.decouvertAutorise = decouvertAutorise;
     }
 
+    public CompteCourant(Long id, String numero, double solde, Long idClient, double decouvert) {
+        super(id, numero, solde, idClient);
+        this.decouvertAutorise = decouvert;
+    }
+
     public double getDecouvertAutorise() {
         return decouvertAutorise;
     }

@@ -13,22 +13,23 @@ import java.util.Optional;
 public class CompteDAO {
 
     public void insert(Compte compte) {
-        String sql = "INSERT INTO compte (numero, solde, idClient, typeCompte, decouvertAutorise, tauxInteret) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO compte (id,numero, solde, idclient, typecompte, decouvertautorise, tauxinteret) VALUES (?,?, ?, ?, ?::type_compte, ?, ?)";
         try (Connection c = DatabaseConfig.getConnection();
              PreparedStatement stmt = c.prepareStatement(sql)) {
 
-            stmt.setString(1, compte.getNumero());
-            stmt.setDouble(2, compte.getSolde());
-            stmt.setLong(3, compte.getIdClient());
+            stmt.setLong(1,compte.getId());
+            stmt.setString(2, compte.getNumero());
+            stmt.setDouble(3, compte.getSolde());
+            stmt.setLong(4, compte.getIdClient());
 
             if (compte instanceof CompteCourant cc) {
-                stmt.setString(4, "COURANT");
-                stmt.setDouble(5, cc.getDecouvertAutorise());
-                stmt.setNull(6, Types.DOUBLE);
+                stmt.setString(5, "COURANT");
+                stmt.setDouble(6, cc.getDecouvertAutorise());
+                stmt.setNull(7, Types.DOUBLE);
             } else if (compte instanceof CompteEpargne ce) {
-                stmt.setString(4, "EPARGNE");
-                stmt.setNull(5, Types.DOUBLE);
-                stmt.setDouble(6, ce.getTauxInteret());
+                stmt.setString(5, "EPARGNE");
+                stmt.setNull(6, Types.DOUBLE);
+                stmt.setDouble(7, ce.getTauxInteret());
             }
 
             int affectedRows = stmt.executeUpdate();
@@ -111,8 +112,9 @@ public class CompteDAO {
     }
 
     public Optional<Compte> findByNumero(String numero)throws SQLException{
-        String sql = "SELECT * FROM compt where numero = ?";
+        String sql = "SELECT * FROM compte where numero = ?";
         try(Connection c = DatabaseConfig.getConnection();PreparedStatement ps = c.prepareStatement(sql)){
+            ps.setString(1,numero);
             ResultSet rs = ps.executeQuery();
             if(rs.next()){
                 return Optional.of(createCompteFromResultSet(rs));
@@ -173,10 +175,10 @@ public class CompteDAO {
 
         if ("COURANT".equalsIgnoreCase(type)) {
             double decouvert = rs.getDouble("decouvertAutorise");
-            return new CompteCourant(numero, solde, idClient, decouvert);
+            return new CompteCourant(id,numero, solde, idClient, decouvert);
         } else if ("EPARGNE".equalsIgnoreCase(type)) {
             double tauxInteret = rs.getDouble("tauxInteret");
-            return new CompteEpargne(numero, solde, idClient, tauxInteret);
+            return new CompteEpargne(id,numero, solde, idClient, tauxInteret);
         } else {
             throw new SQLException("Type de compte inconnu: " + type);
         }
