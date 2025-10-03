@@ -1,10 +1,14 @@
 package main.com.albaraka.ui;
 
 import main.com.albaraka.entity.Transaction;
+import main.com.albaraka.entity.TypeTransaction;
 import main.com.albaraka.service.TransactionService;
 import main.com.albaraka.util.FormatUtil;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -70,6 +74,41 @@ public class MenuTransaction {
         afficherTransactions(transactions);
     }
 
+    private void listerParClient() throws SQLException {
+        System.out.println("\n--- TRANSACTIONS D'UN CLIENT ---");
+        System.out.println("ID du client: ");
+        Long idClient = sc.nextLong();
+
+        List<Transaction> transactions = transactionService.listerTransactionsParClient(idClient);
+        afficherTransactions(transactions);
+    }
+
+    public void filtrerParMontant()throws SQLException{
+        System.out.println("\n--- TRANSACTIONS FILTRER PAR MONTANT ---");
+        System.out.println("Entrer le Montant : ");
+        Double montant = sc.nextDouble();
+        List<Transaction> transactions = transactionService.filtrerParMontant(montant);
+        afficherTransactions(transactions);
+    }
+
+    public void filtrerParType() throws SQLException{
+        System.out.println("\n--- TRANSACTIONS FILTRER PAR TYPE ---");
+        System.out.println("Entrer le Type: ");
+        String type = sc.nextLine();
+        List<Transaction> transactions = transactionService.filtrerParType(TypeTransaction.valueOf(type));
+        afficherTransactions(transactions);
+    }
+
+    public void filtrerParDate() throws  SQLException{
+        System.out.println("\n--- TRANSACTIONS FILTRER PAR DATE ---");
+        System.out.println("Entrer le Date (yyyy-mm-jj): ");
+        LocalDateTime date = LocalDateTime.parse(sc.nextLine());
+        List<Transaction> transactions = transactionService.filtrerParDate(date);
+        afficherTransactions(transactions);
+    }
+
+
+
     private void afficherTransactions(List<Transaction> transactions) {
         if (transactions.isEmpty()) {
             System.out.println("Aucune transaction trouvée.");
@@ -89,5 +128,7 @@ public class MenuTransaction {
             System.out.println("----------------------------");
         }
     }
+
+
 
 }
