@@ -95,17 +95,46 @@ public class RapportService {
                 .collect(Collectors.toList());
     }
 
-    public List<Compte> identifierComptesInactifs(LocalDateTime seuilDate) throws SQLException {
-        return compteDAO.findAll().stream()
+    public List<Compte> identifierComptesInactifs(int joursInactivite) throws SQLException {
+        List<Compte> comptes = compteDAO.findAll();
+        LocalDateTime seuilDate = LocalDateTime.now().minusDays(joursInactivite);
+
+        return comptes.stream()
                 .filter(compte -> {
                     try {
-                        return transactionDAO.findByCompte(compte.getId())
-                                .stream()
+                        List<Transaction> transactions = transactionDAO.findByCompte(compte.getId());
+                        return transactions.stream()
                                 .noneMatch(t -> t.date().isAfter(seuilDate));
                     } catch (SQLException e) {
-                        throw new RuntimeException(e);
+                        return false;
                     }
-                }).toList();
+                })
+                .collect(Collectors.toList());
+    }
+
+    public List<String> genererAlertes() throws SQLException {
+        List<String> alertes = new ArrayList<>();
+
+        List<Compte> comptes = compteDAO.findAll();
+        for (Compte compte : comptes) {
+            if (compte.getSolde() < 100.0) {
+                alertes.add(String.format("ALERTE: Solde bas sur le compte %s (%.2f €)",
+                        compte.getNumero(), compte.getSolde()));
+            }
+        }
+
+        List<Compte> comptesInactifs = identifierComptesInactifs(90);
+        for (Compte compte : comptesInactifs) {
+            alertes.add(String.format("ALERTE: Compte inactif %s depuis plus de 90 jours",
+                    compte.getNumero()));
+        }
+
+        List<Transaction> suspectes = detecterTransactionsSuspectes(5000.0, "France", 3);
+        if (!suspectes.isEmpty()) {
+            alertes.add(String.format("ALERTE: %d transactions suspectes detectees",
+                    suspectes.size()));
+        }
+        return alertes;
     }
 
 
