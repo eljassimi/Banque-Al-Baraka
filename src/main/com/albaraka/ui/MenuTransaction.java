@@ -1,7 +1,11 @@
 package main.com.albaraka.ui;
 
+import main.com.albaraka.entity.Transaction;
 import main.com.albaraka.service.TransactionService;
+import main.com.albaraka.util.FormatUtil;
 
+import java.sql.SQLException;
+import java.util.List;
 import java.util.Scanner;
 
 public class MenuTransaction {
@@ -53,6 +57,36 @@ public class MenuTransaction {
             } catch (Exception e) {
                 System.err.println("Erreur: " + e.getMessage());
             }
+        }
+    }
+
+    private void listerParCompte() throws SQLException {
+        System.out.println("\n--- TRANSACTIONS D'UN COMPTE ---");
+
+        System.out.println("ID du compte: ");
+        Long idCompte = sc.nextLong();
+
+        List<Transaction> transactions = transactionService.listerTransactionsParCompte(idCompte);
+        afficherTransactions(transactions);
+    }
+
+    private void afficherTransactions(List<Transaction> transactions) {
+        if (transactions.isEmpty()) {
+            System.out.println("Aucune transaction trouvée.");
+            return;
+        }
+
+        System.out.println("Nombre de transactions: " + transactions.size());
+        System.out.println();
+
+        for (Transaction transaction : transactions) {
+            System.out.println("ID       : " + transaction.id());
+            System.out.println("Date     : " + FormatUtil.formaterDateTime(transaction.date()));
+            System.out.println("Type     : " + transaction.type());
+            System.out.println("Montant  : " + FormatUtil.formaterMontant(transaction.montant()));
+            System.out.println("Lieu     : " + transaction.lieu());
+            System.out.println("Compte   : " + transaction.idCompte());
+            System.out.println("----------------------------");
         }
     }
 
