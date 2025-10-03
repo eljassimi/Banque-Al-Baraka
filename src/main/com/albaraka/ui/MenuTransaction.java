@@ -130,7 +130,7 @@ public class MenuTransaction {
 
     private void statistiquesParClient()throws SQLException{
         System.out.println("\n--- STATS PAR CLIENT ---");
-        System.out.println("ID du compte : ");
+        System.out.println("ID du Client : ");
         Long idClient = sc.nextLong();
 
         double total = transactionService.calculerTotalParClient(idClient);
@@ -142,6 +142,20 @@ public class MenuTransaction {
 
         sc.nextLine();
     }
+
+    private void statistiquesParCompte() throws SQLException{
+        System.out.println("\n--- STATS PAR COMPTE ---");
+        System.out.println("ID du compte : ");
+        Long idCompte = sc.nextLong();
+
+        double total = transactionService.calculerTotalParCompte(idCompte);
+        double moyenne = transactionService.calculerMoyenPerClient(idCompte);
+
+        System.out.println("Statistiques pour le compte " + idCompte + ":");
+        System.out.println("Total des transactions: " + FormatUtil.formaterMontant(total));
+        System.out.println("Moyenne des transactions: " + FormatUtil.formaterMontant(moyenne));
+    }
+
 
 
     private void afficherTransactions(List<Transaction> transactions) {
