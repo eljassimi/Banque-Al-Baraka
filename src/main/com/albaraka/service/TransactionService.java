@@ -51,9 +51,23 @@ public class TransactionService {
         return transactionDAO.findAll().stream().collect(Collectors.groupingBy(Transaction::type));
     }
 
+    public double calculerTotalParClient(Long idClient) throws SQLException {
+        List<Transaction> transactions = transactionDAO.findByClient(idClient);
+        return transactions.stream()
+                .mapToDouble(Transaction::montant)
+                .sum();
+    }
+
     public double calculerMoyenPerClient(Long idClient) throws SQLException {
         List<Transaction> transaction = transactionDAO.findByClient(idClient);
         return transaction.stream().collect(Collectors.averagingDouble(Transaction::montant));
+    }
+
+    public double calculerTotalParCompte(Long idCompte) throws SQLException {
+        List<Transaction> transactions = transactionDAO.findByCompte(idCompte);
+        return transactions.stream()
+                .mapToDouble(Transaction::montant)
+                .sum();
     }
 
     public double calculerMoyenPerCompte(Long idCompte) throws SQLException {

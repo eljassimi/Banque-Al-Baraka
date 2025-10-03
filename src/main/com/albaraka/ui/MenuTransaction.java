@@ -33,11 +33,10 @@ public class MenuTransaction {
             System.out.println("5. Filtrer par plage de dates");
             System.out.println("6. Filtrer par lieu");
             System.out.println("7. Regrouper par type");
-            System.out.println("8. Regrouper par période");
-            System.out.println("9. Statistiques par client");
-            System.out.println("10. Statistiques par compte");
-            System.out.println("11. Détecter transactions suspectes");
-            System.out.println("12. Statistiques globales");
+            System.out.println("8. Statistiques par client");
+            System.out.println("9. Statistiques par compte");
+            System.out.println("10. Détecter transactions suspectes");
+            System.out.println("11. Statistiques globales");
             System.out.println("0. Retour au menu principal");
 
             int choix = sc.nextInt();
@@ -51,11 +50,10 @@ public class MenuTransaction {
                     case 5 -> filtrerParDate();
                     case 6 -> filtrerParLieu();
                     case 7 -> regrouperParType();
-                    case 8 -> regrouperParPeriode();
-                    case 9 -> statistiquesParClient();
-                    case 10 -> statistiquesParCompte();
-                    case 11 -> detecterSuspectes();
-                    case 12 -> afficherStatistiquesGlobales();
+                    case 8 -> statistiquesParClient();
+                    case 9 -> statistiquesParCompte();
+                    case 10 -> detecterSuspectes();
+                    case 11 -> afficherStatistiquesGlobales();
                     case 0 -> continuer = false;
                     default -> System.out.println("Choix invalide. Veuillez réessayer.");
                 }
@@ -130,17 +128,19 @@ public class MenuTransaction {
                 });
     }
 
-    private void regrouperParPeriode()throws Exception{
-        System.out.println("\n--- REGROUPEMENT PAR Periode ---");
-        transactionService.regrouperParType()
-                .forEach((type, transactions) -> {
-                    double total = transactions.stream().mapToDouble(Transaction::montant).sum();
-                    System.out.printf("\n%s:\n  Nombre: %d\n  Total: %s\n  Moyenne: %s\n",
-                            type,
-                            transactions.size(),
-                            FormatUtil.formaterMontant(total),
-                            FormatUtil.formaterMontant(total / transactions.size()));
-                });
+    private void statistiquesParClient()throws SQLException{
+        System.out.println("\n--- STATS PAR CLIENT ---");
+        System.out.println("ID du compte : ");
+        Long idClient = sc.nextLong();
+
+        double total = transactionService.calculerTotalParClient(idClient);
+        double moyenne = transactionService.calculerMoyenPerClient(idClient);
+
+        System.out.println("Statistiques pour le client " + idClient + ":");
+        System.out.println("Total des transactions: " + FormatUtil.formaterMontant(total));
+        System.out.println("Moyenne des transactions: " + FormatUtil.formaterMontant(moyenne));
+
+        sc.nextLine();
     }
 
 
