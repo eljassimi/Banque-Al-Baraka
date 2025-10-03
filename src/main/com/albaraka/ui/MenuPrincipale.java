@@ -7,11 +7,13 @@ public class MenuPrincipale {
     private final MenuClient menuClient;
     private final MenuCompte menuCompte;
     private final MenuTransaction menuTransaction;
+    private final MenuRapport menuRapport;
 
     public MenuPrincipale() {
         this.menuClient = new MenuClient();
         this.menuCompte = new MenuCompte();
         this.menuTransaction = new MenuTransaction();
+        this.menuRapport =  new MenuRapport();
     }
 
     public void afficher() throws SQLException {
@@ -32,6 +34,7 @@ public class MenuPrincipale {
                     case 1 -> menuClient.afficher();
                     case 2 ->menuCompte.afficher();
                     case 3 -> menuTransaction.afficher();
+                    case 4 -> menuRapport.afficher();
                     case 0 -> {
                         continuer = false;
                         System.out.println("------ Application Closed ------");

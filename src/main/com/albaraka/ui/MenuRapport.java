@@ -31,8 +31,7 @@ public class MenuRapport {
             System.out.println("2. Rapport mensuel");
             System.out.println("3. Détecter transactions suspectes");
             System.out.println("4. Identifier comptes inactifs");
-            System.out.println("5. Rapport d'analyse complet");
-            System.out.println("6. Alertes");
+            System.out.println("5. Alertes");
             System.out.println("0. Retour au menu principal");
             int choix = sc.nextInt();
 
@@ -42,8 +41,7 @@ public class MenuRapport {
                     case 2 -> genererRapportMensuel();
                     case 3 -> detecterTransactionsSuspectes();
                     case 4 -> identifierComptesInactifs();
-                    case 5 -> genererRapportComplet();
-                    case 6 -> afficherAlertes();
+                    case 5 -> afficherAlertes();
                     case 0 -> continuer = false;
                     default -> System.out.println("Choix invalide");
                 }

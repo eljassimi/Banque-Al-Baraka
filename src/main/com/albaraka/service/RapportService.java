@@ -30,15 +30,21 @@ public class RapportService {
     }
 
     public List<Client> topFiveClient() throws SQLException {
-        List<Compte> comptes = compteDAO.findAll().stream().sorted(Comparator.comparing(Compte::getSolde)).limit(5).toList();
-        List<Client> clients = new ArrayList<>();
-        for (Compte compte : comptes) {
-            clients.add(clientDAO.findById(compte.getIdClient()));
-        }
-        return clients;
+        return compteDAO.findAll().stream()
+                .sorted(Comparator.comparingDouble(Compte::getSolde).reversed())
+                .limit(5)
+                .map(compte -> {
+                    try {
+                        return clientDAO.findById(compte.getIdClient());
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                }).filter(Objects::nonNull)
+                .toList();
     }
 
-    public String GenerateRapportMonsuel(int mois, int annee) throws SQLException {
+
+    public String GenerateRapportMonsuel(int annee, int mois) throws SQLException {
         LocalDateTime debutDeMois = LocalDateTime.of(annee,mois,1,0,0);
         LocalDateTime finDeMois = debutDeMois.plusMonths(1);
 
@@ -46,8 +52,7 @@ public class RapportService {
 
         Map<TypeTransaction, List<Transaction>> parType =transactions.stream().collect(Collectors.groupingBy(Transaction::type));
         StringBuilder rapport = new StringBuilder();
-        rapport.append(String.format("--- RAPPORT MENSUEL %d-%02d ===\n", annee, mois));
-
+        rapport.append(String.format("--- RAPPORT MENSUEL %d-%02d ===\n\n", annee, mois));
         rapport.append(String.format("--- RAPPORT PAR TYPE %d-%02d ===\n", annee, mois));
         parType.forEach((type, trans) -> {
 
@@ -55,7 +60,7 @@ public class RapportService {
             double total = trans.stream().mapToDouble(Transaction::montant).sum();
             double moyenne = trans.stream().mapToDouble(Transaction::montant).average().orElse(0.0);
 
-            rapport.append(String.format("%s:\n", type));
+            rapport.append(String.format("------- %s --------:\n", type));
             rapport.append(String.format("  Nombre: %d\n", nombre));
             rapport.append(String.format("  Total: %.2f €\n", total));
             rapport.append(String.format("  Moyenne: %.2f €\n\n", moyenne));
