@@ -8,6 +8,7 @@ import main.com.albaraka.util.FormatUtil;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -92,6 +93,7 @@ public class MenuTransaction {
 
     public void filtrerParType() throws SQLException{
         System.out.println("\n--- TRANSACTIONS FILTRER PAR TYPE ---");
+        sc.nextLine();
         System.out.println("Entrer le Type: ");
         String type = sc.nextLine();
         List<Transaction> transactions = transactionService.filtrerParType(TypeTransaction.valueOf(type));
@@ -100,14 +102,16 @@ public class MenuTransaction {
 
     public void filtrerParDate() throws  SQLException{
         System.out.println("\n--- TRANSACTIONS FILTRER PAR DATE ---");
+        sc.nextLine();
         System.out.println("Entrer le Date (yyyy-mm-jj): ");
-        LocalDateTime date = LocalDateTime.parse(sc.nextLine());
+        LocalDateTime date = LocalDate.parse(sc.nextLine(), DateTimeFormatter.ofPattern("yyyy-MM-dd")).atStartOfDay();
         List<Transaction> transactions = transactionService.filtrerParDate(date);
         afficherTransactions(transactions);
     }
 
     public void filtrerParLieu() throws SQLException{
         System.out.println("\n--- TRANSACTIONS FILTRER PAR Lieu ---");
+        sc.nextLine();
         System.out.println("Entrer le Lieu : ");
         String lieu = sc.nextLine();
         List<Transaction> transactions = transactionService.filtrerParLieu(lieu);
@@ -116,7 +120,7 @@ public class MenuTransaction {
 
     private void regrouperParType() throws SQLException {
         System.out.println("\n--- REGROUPEMENT PAR TYPE ---");
-
+        sc.nextLine();
         transactionService.regrouperParType()
                 .forEach((type, transactions) -> {
                     double total = transactions.stream().mapToDouble(Transaction::montant).sum();
@@ -130,6 +134,7 @@ public class MenuTransaction {
 
     private void statistiquesParClient()throws SQLException{
         System.out.println("\n--- STATS PAR CLIENT ---");
+        sc.nextLine();
         System.out.println("ID du Client : ");
         Long idClient = sc.nextLong();
 
@@ -145,6 +150,7 @@ public class MenuTransaction {
 
     private void statistiquesParCompte() throws SQLException{
         System.out.println("\n--- STATS PAR COMPTE ---");
+        sc.nextLine();
         System.out.println("ID du compte : ");
         Long idCompte = sc.nextLong();
 
@@ -158,6 +164,7 @@ public class MenuTransaction {
 
     private void detecterSuspectes()throws SQLException{
         System.out.println("\n--- DETECT DU SUSPECTS ---");
+        sc.nextLine();
         System.out.println("Seuil du Montant suspecte:");
         Double seuilMontant = sc.nextDouble();
         List<Transaction> suspectes = transactionService.detecterTransactionsSuspectes(seuilMontant);
@@ -171,8 +178,7 @@ public class MenuTransaction {
     }
 
     public void afficherStatistiquesGlobales() throws SQLException{
-        System.out.println("\n--- STATISTIQUES GLOBALES ---");
-
+        sc.nextLine();
         String statistiques = transactionService.obtenirStatistiquesGlobales();
         System.out.println(statistiques);
     }
@@ -197,7 +203,4 @@ public class MenuTransaction {
             System.out.println("----------------------------");
         }
     }
-
-
-
 }

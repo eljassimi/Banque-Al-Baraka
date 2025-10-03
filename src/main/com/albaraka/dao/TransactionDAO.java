@@ -117,7 +117,8 @@ public class TransactionDAO {
 
 
     public List<Transaction> findByClient(Long idCompte) throws SQLException {
-        String sql = "SELECT * FROM transaction WHERE idClient = ?";
+        String sql = "SELECT t.id, t.date, t.montant, t.type, t.lieu, t.idCompte " +
+                     "FROM transaction t JOIN compte c ON t.idCompte = c.id WHERE c.idClient = ? ORDER BY t.date DESC";
         List<Transaction> transactions = new ArrayList<>();
 
         try (Connection conn = DatabaseConfig.getConnection();

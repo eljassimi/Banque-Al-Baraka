@@ -22,11 +22,11 @@ public class RapportService {
     private final TransactionService transactionService;
 
 
-    public RapportService(ClientDAO clientDAO, CompteDAO compteDAO, TransactionDAO transactionDAO, TransactionService transactionService) {
-        this.clientDAO = clientDAO;
-        this.compteDAO = compteDAO;
-        this.transactionDAO = transactionDAO;
-        this.transactionService = transactionService;
+    public RapportService() {
+        this.clientDAO = new ClientDAO();
+        this.compteDAO = new CompteDAO();
+        this.transactionDAO = new TransactionDAO();
+        this.transactionService = new TransactionService();
     }
 
     public List<Client> topFiveClient() throws SQLException {
