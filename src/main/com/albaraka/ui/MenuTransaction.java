@@ -149,18 +149,38 @@ public class MenuTransaction {
         Long idCompte = sc.nextLong();
 
         double total = transactionService.calculerTotalParCompte(idCompte);
-        double moyenne = transactionService.calculerMoyenPerClient(idCompte);
+        double moyenne = transactionService.calculerMoyenPerCompte(idCompte);
 
         System.out.println("Statistiques pour le compte " + idCompte + ":");
         System.out.println("Total des transactions: " + FormatUtil.formaterMontant(total));
         System.out.println("Moyenne des transactions: " + FormatUtil.formaterMontant(moyenne));
     }
 
+    private void detecterSuspectes()throws SQLException{
+        System.out.println("\n--- DETECT DU SUSPECTS ---");
+        System.out.println("Seuil du Montant suspecte:");
+        Double seuilMontant = sc.nextDouble();
+        List<Transaction> suspectes = transactionService.detecterTransactionsSuspectes(seuilMontant);
+
+        if (suspectes.isEmpty()) {
+            System.out.println("Aucune transaction suspecte detectee.");
+        } else {
+            System.out.println("Transactions suspectes (montant > " + FormatUtil.formaterMontant(seuilMontant) + "):");
+            afficherTransactions(suspectes);
+        }
+    }
+
+    public void afficherStatistiquesGlobales() throws SQLException{
+        System.out.println("\n--- STATISTIQUES GLOBALES ---");
+
+        String statistiques = transactionService.obtenirStatistiquesGlobales();
+        System.out.println(statistiques);
+    }
 
 
     private void afficherTransactions(List<Transaction> transactions) {
         if (transactions.isEmpty()) {
-            System.out.println("Aucune transaction trouvée.");
+            System.out.println("Aucune transaction trouvee.");
             return;
         }
 

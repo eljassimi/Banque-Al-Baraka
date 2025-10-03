@@ -100,6 +100,30 @@ public class TransactionService {
         return suspectes;
     }
 
+    public String obtenirStatistiquesGlobales() throws SQLException{
+            List<Transaction> transactions = transactionDAO.findAll();
+            long totalTransactions = transactions.size();
+            double totalMontant = transactions.stream().mapToDouble(Transaction::montant).sum();
+            double moyenneMontant = transactions.stream().mapToDouble(Transaction::montant).average().orElse(0.0);
+
+            Map<TypeTransaction, Long> parType = transactions.stream()
+                    .collect(Collectors.groupingBy(Transaction::type, Collectors.counting()));
+
+            StringBuilder stats = new StringBuilder();
+            stats.append("=== STATISTIQUES GLOBALES ===\n");
+            stats.append(String.format("Total des transactions: %d\n", totalTransactions));
+            stats.append(String.format("Montant total: %.2f €\n", totalMontant));
+            stats.append(String.format("Moyenne par transaction: %.2f €\n", moyenneMontant));
+            stats.append("\n--- RÉPARTITION PAR TYPE ---\n");
+
+            parType.forEach((type, count) -> {
+                double pourcentage = (count * 100.0) / totalTransactions;
+                stats.append(String.format("%s: %d (%.1f%%)\n", type, count, pourcentage));
+            });
+
+            return stats.toString();
+    }
+
 
 
 }
